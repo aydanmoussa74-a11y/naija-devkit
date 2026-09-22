@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Naija DevKit">
+  <rect width="192" height="192" rx="28" fill="#1e1e1e"/>
+  <rect x="16" y="16" width="160" height="160" rx="16" fill="#252526"/>
+  <rect x="16" y="16" width="28" height="160" rx="4" fill="#333333"/>
+  <rect x="22" y="36" width="16" height="16" rx="3" fill="#007acc"/>
+  <rect x="22" y="60" width="16" height="16" rx="3" fill="#008751"/>
+  <rect x="22" y="84" width="16" height="16" rx="3" fill="#d4d4d4"/>
+  <path d="M64 58h78v12H64zm0 28h54v12H64zm0 28h66v12H64z" fill="#d4d4d4"/>
+  <rect x="16" y="160" width="160" height="16" fill="#007acc"/>
+</svg>

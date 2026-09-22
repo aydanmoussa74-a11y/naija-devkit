@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Naija DevKit">
+  <rect width="512" height="512" rx="72" fill="#1e1e1e"/>
+  <rect x="40" y="40" width="432" height="432" rx="36" fill="#252526"/>
+  <rect x="40" y="40" width="72" height="432" fill="#333333"/>
+  <rect x="56" y="88" width="40" height="40" rx="8" fill="#007acc"/>
+  <rect x="56" y="148" width="40" height="40" rx="8" fill="#008751"/>
+  <rect x="56" y="208" width="40" height="40" rx="8" fill="#d4d4d4"/>
+  <rect x="56" y="268" width="40" height="40" rx="8" fill="#ce9178"/>
+  <path d="M160 140h250v28H160zm0 72h180v28H160zm0 72h210v28H160z" fill="#d4d4d4"/>
+  <rect x="40" y="432" width="432" height="40" fill="#007acc"/>
+</svg>
