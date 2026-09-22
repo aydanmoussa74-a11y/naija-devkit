@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1e1e1e">
+  <meta name="description" content="Offline-first developer workspace: snippets, notes, JSON lab, regex, IDs, and local backups.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="DevKit">
+  <title>Naija DevKit</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+
+  <div class="app" id="app">
+    <header class="titlebar">
+      <button class="icon-btn" id="btn-explorer" type="button" aria-label="Toggle explorer" aria-controls="explorer" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <div class="titlebar-brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <strong>Naija DevKit</strong>
+          <span id="title-file">Welcome</span>
+        </div>
+      </div>
+      <button class="icon-btn" id="btn-command" type="button" aria-label="New snippet">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <nav class="activity" id="activity" aria-label="Tools">
+      <button class="activity-btn is-active" data-route="vault" type="button" aria-label="Snippets Vault" title="Snippets Vault">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14 3v5h5M9 13h6M9 17h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <button class="activity-btn" data-route="json" type="button" aria-label="JSON Lab" title="JSON Lab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5c-2 0-3 1.4-3 3.2 0 2.4 2 3.1 3 4.8-1 1.7-3 2.4-3 4.8C5 19.6 6 21 8 21M16 5c2 0 3 1.4 3 3.2 0 2.4-2 3.1-3 4.8 1 1.7 3 2.4 3 4.8 0 1.8-1 3.2-3 3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="activity-btn" data-route="regex" type="button" aria-label="Regex and ID Toolkit" title="Regex & IDs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="7" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="17" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 12h4.4M14.6 9.2 12.2 12l2.4 2.8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <button class="activity-btn" data-route="backup" type="button" aria-label="Data Manager" title="Backup">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0-3.5-3.5M12 14l3.5-3.5M5 16.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="activity-btn" data-route="settings" type="button" aria-label="Settings and API keys" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4.5v2.2m0 10.6v2.2M7.2 6.1l1.6 1.6m6.4 6.4 1.6 1.6M4.5 12h2.2m10.6 0h2.2M7.2 17.9l1.6-1.6m6.4-6.4 1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </nav>
+
+    <aside class="explorer" id="explorer" aria-label="Explorer">
+      <div class="explorer-head">
+        <span>EXPLORER</span>
+        <button class="text-btn" id="btn-new-item" type="button">New</button>
+      </div>
+      <label class="sr-only" for="search-box">Filter snippets and notes</label>
+      <input id="search-box" class="search" type="search" placeholder="Filter files, tags…" autocomplete="off">
+      <div class="tree" id="file-tree"></div>
+    </aside>
+
+    <main class="workspace" id="workspace">
+      <section class="view is-active" id="view-vault" data-view="vault" aria-label="Snippets Vault">
+        <div class="empty-state" id="vault-empty">
+          <h1>Snippets & Notes Vault</h1>
+          <p>Store code and notes on this phone. Everything lives in IndexedDB and works offline.</p>
+          <button class="primary-btn" id="btn-empty-new" type="button">Create first snippet</button>
+        </div>
+        <div class="editor-wrap is-hidden" id="vault-editor">
+          <div class="editor-toolbar">
+            <label class="field-inline">
+              <span>Title</span>
+              <input id="item-title" type="text" maxlength="120" placeholder="untitled">
+            </label>
+            <label class="field-inline">
+              <span>Kind</span>
+              <select id="item-kind">
+                <option value="snippet">Snippet</option>
+                <option value="note">Note</option>
+              </select>
+            </label>
+            <label class="field-inline">
+              <span>Language</span>
+              <select id="item-lang">
+                <option value="js">JavaScript</option>
+                <option value="ts">TypeScript</option>
+                <option value="py">Python</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="json">JSON</option>
+                <option value="md">Markdown</option>
+                <option value="txt">Text</option>
+              </select>
+            </label>
+            <label class="field-inline grow">
+              <span>Tags</span>
+              <input id="item-tags" type="text" placeholder="android, pwa, fetch">
+            </label>
+          </div>
+          <div class="editor-split">
+            <label class="sr-only" for="item-body">Editor</label>
+            <textarea id="item-body" spellcheck="false" placeholder="// write here"></textarea>
+            <pre class="highlight" id="item-highlight" aria-hidden="true"></pre>
+          </div>
+          <div class="editor-actions">
+            <button class="primary-btn" id="btn-save-item" type="button">Save</button>
+            <button class="ghost-btn" id="btn-download-item" type="button">Download file</button>
+            <button class="ghost-btn" id="btn-copy-item" type="button">Copy</button>
+            <button class="danger-btn" id="btn-delete-item" type="button">Delete</button>
+            <span class="muted" id="save-state">Unsaved</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-json" data-view="json" hidden aria-label="JSON Lab">
+        <div class="pane-head">
+          <h1>JSON Lab</h1>
+          <div class="chip-row">
+            <button class="ghost-btn" id="btn-json-pretty" type="button">Pretty</button>
+            <button class="ghost-btn" id="btn-json-mini" type="button">Minify</button>
+            <button class="ghost-btn" id="btn-json-fix" type="button">Fix</button>
+            <button class="ghost-btn" id="btn-json-copy" type="button">Copy</button>
+            <button class="ghost-btn" id="btn-json-download" type="button">Download .json</button>
+          </div>
+        </div>
+        <textarea id="json-input" class="lab-input" spellcheck="false" placeholder='{"ok": true}'></textarea>
+        <p class="status-line" id="json-status" role="status">Paste JSON to validate.</p>
+      </section>
+
+      <section class="view" id="view-regex" data-view="regex" hidden aria-label="Regex and ID Toolkit">
+        <div class="pane-head">
+          <h1>Regex & ID Toolkit</h1>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h2>Regex tester</h2>
+            <label class="field">
+              <span>Pattern</span>
+              <input id="rx-pattern" type="text" placeholder="[A-Z]\\w+" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Flags</span>
+              <input id="rx-flags" type="text" value="g" maxlength="8" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Sample text</span>
+              <textarea id="rx-sample" rows="6" placeholder="Test string"></textarea>
+            </label>
+            <p class="status-line" id="rx-status" role="status">No matches yet.</p>
+            <pre class="preview" id="rx-preview"></pre>
+          </div>
+          <div class="card">
+            <h2>ID toolkit</h2>
+            <div class="chip-row">
+              <button class="primary-btn" id="btn-uuid" type="button">New UUID v4</button>
+              <button class="ghost-btn" id="btn-copy-uuid" type="button">Copy UUID</button>
+            </div>
+            <input id="uuid-out" class="mono-input" readonly value="">
+            <label class="field">
+              <span>Base64 input</span>
+              <textarea id="b64-in" rows="4" placeholder="text or base64"></textarea>
+            </label>
+            <div class="chip-row">
+              <button class="ghost-btn" id="btn-b64-enc" type="button">Encode</button>
+              <button class="ghost-btn" id="btn-b64-dec" type="button">Decode</button>
+              <button class="ghost-btn" id="btn-b64-copy" type="button">Copy result</button>
+            </div>
+            <textarea id="b64-out" class="lab-input compact" readonly rows="4"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-backup" data-view="backup" hidden aria-label="Backup and data manager">
+        <div class="pane-head">
+          <h1>Data Manager</h1>
+        </div>
+        <div class="card-stack">
+          <article class="card">
+            <h2>Backup</h2>
+            <p>Export a single JSON file you can keep in Downloads or send to yourself. This is your disaster recovery if Chrome clears site data.</p>
+            <label class="check">
+              <input id="include-keys" type="checkbox">
+              Include API keys in export (off by default)
+            </label>
+            <div class="chip-row">
+              <button class="primary-btn" id="btn-export" type="button">Download backup JSON</button>
+              <button class="ghost-btn" id="btn-import" type="button">Import backup</button>
+              <input id="import-file" type="file" accept="application/json,.json" hidden>
+            </div>
+            <p class="status-line" id="backup-status" role="status"></p>
+          </article>
+          <article class="card">
+            <h2>Storage</h2>
+            <p id="storage-detail">Measuring local storage…</p>
+            <button class="danger-btn" id="btn-wipe" type="button">Delete all vault data</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings" data-view="settings" hidden aria-label="Settings">
+        <div class="pane-head">
+          <h1>Settings</h1>
+        </div>
+        <div class="card-stack">
+          <article class="card">
+            <h2>Local API key vault</h2>
+            <p>Keys stay on this device in <code>localStorage</code>. They are never uploaded by DevKit. Do not export a backup that includes keys onto a shared phone.</p>
+            <label class="field">
+              <span>OpenRouter key</span>
+              <input id="key-openrouter" type="password" autocomplete="off" placeholder="sk-or-…">
+            </label>
+            <label class="field">
+              <span>Gemini key</span>
+              <input id="key-gemini" type="password" autocomplete="off" placeholder="AIza…">
+            </label>
+            <div class="chip-row">
+              <button class="primary-btn" id="btn-save-keys" type="button">Save keys</button>
+              <button class="ghost-btn" id="btn-copy-openrouter" type="button">Copy OpenRouter snippet</button>
+              <button class="ghost-btn" id="btn-copy-gemini" type="button">Copy Gemini snippet</button>
+              <button class="danger-btn" id="btn-clear-keys" type="button">Clear keys</button>
+            </div>
+            <p class="status-line" id="keys-status" role="status"></p>
+          </article>
+          <article class="card">
+            <h2>Workspace</h2>
+            <label class="check">
+              <input id="pref-wrap" type="checkbox" checked>
+              Wrap editor lines
+            </label>
+            <label class="field">
+              <span>Font scale</span>
+              <select id="pref-font">
+                <option value="14">14 — compact</option>
+                <option value="16" selected>16 — default</option>
+                <option value="18">18 — large</option>
+              </select>
+            </label>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" id="statusbar">
+      <span class="sb-item" id="sb-net">ONLINE</span>
+      <span class="sb-item" id="sb-route">VAULT</span>
+      <span class="sb-item" id="sb-count">0 files</span>
+      <span class="sb-item" id="sb-store">storage —</span>
+      <span class="sb-item" id="sb-sw">SW idle</span>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
