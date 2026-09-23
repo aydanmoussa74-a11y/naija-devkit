@@ -3,7 +3,9 @@ const PRECACHE = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js",
+  "./ndk-core.js",
+  "./ndk-ui.js",
+  "./ndk-more.js",
   "./manifest.json",
   "./sw.js",
   "./icons/icon-192.svg",
@@ -29,7 +31,6 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-
   event.respondWith((async () => {
     const cached = await caches.match(request, { ignoreSearch: true });
     if (cached) {
@@ -59,7 +60,5 @@ async function updateCache(request) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(request, fresh.clone());
     }
-  } catch (_error) {
-    /* keep cache */
-  }
+  } catch (_error) {}
 }
