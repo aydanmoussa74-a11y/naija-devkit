@@ -15,7 +15,6 @@
 </head>
 <body>
   <a class="skip" href="#home">Skip</a>
-
   <section id="home" class="home">
     <header class="topbar">
       <button class="icon-btn" id="home-menu" type="button" aria-label="Open menu">
@@ -37,14 +36,14 @@
         </div>
       </div>
       <div id="hub" class="hub is-hidden">
-        <button class="search-launch" id="search-launch" type="button">Search files, snippets…</button>
+        <button class="search-launch" id="search-launch" type="button">Search files, snippets...</button>
         <h2>Recent</h2>
         <div id="home-recents" class="list"></div>
         <h2>Lab</h2>
         <div class="lab-grid">
           <button class="lab-card" data-lab="snippets" type="button"><span>Snippets</span><small>Reuse bits</small></button>
           <button class="lab-card" data-lab="regex" type="button"><span>Regex Test</span><small>Match locally</small></button>
-          <button class="lab-card" data-lab="json" type="button"><span>JSON Lab</span><small>Pretty · fix</small></button>
+          <button class="lab-card" data-lab="json" type="button"><span>JSON Lab</span><small>Pretty / fix</small></button>
           <button class="lab-card" data-lab="vibe" type="button"><span>Vibe</span><small>Write and run</small></button>
         </div>
         <h2>Workspace</h2>
@@ -56,7 +55,6 @@
       </div>
     </div>
   </section>
-
   <section id="ide" class="ide is-hidden">
     <header class="ide-top">
       <button class="icon-btn" id="ide-back" type="button" aria-label="Back to home">
@@ -81,7 +79,6 @@
     </div>
     <div class="chips" id="chips" aria-label="Insert"></div>
   </section>
-
   <aside id="sidebar" class="sidebar" hidden>
     <div class="scrim" id="sidebar-scrim"></div>
     <nav class="panel" aria-label="Menu">
@@ -110,17 +107,15 @@
       <p class="version">Naija DevKit 0.0.1</p>
     </nav>
   </aside>
-
   <section id="search" class="search-full" hidden>
     <header class="topbar">
       <button class="icon-btn" id="search-back" type="button" aria-label="Close search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8 12l6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
-      <input id="search-input" type="search" placeholder="Search files…" autocomplete="off">
+      <input id="search-input" type="search" placeholder="Search files..." autocomplete="off">
     </header>
     <div id="search-results" class="list"></div>
   </section>
-
   <section id="sheet" class="sheet" hidden>
     <header class="sheet-top">
       <button class="icon-btn" id="sheet-back" type="button" aria-label="Close">
@@ -130,7 +125,6 @@
     </header>
     <div id="sheet-body" class="sheet-body"></div>
   </section>
-
   <input id="file-input" type="file" hidden multiple accept=".html,.css,.js,.ts,.py,.md,.json,.txt,text/*">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="./app.js" defer></script>
