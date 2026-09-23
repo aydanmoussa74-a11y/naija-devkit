@@ -21,9 +21,7 @@ function bindLongPress(el, item) {
   const start = (ev) => { if (ev.pointerType === "mouse" && ev.button !== 0) return; timer = setTimeout(() => { timer = 0; openOps(item); }, 480); };
   const clear = () => { if (timer) { clearTimeout(timer); timer = 0; } };
   el.addEventListener("pointerdown", start);
-  el.addEventListener("pointerup", clear);
-  el.addEventListener("pointerleave", clear);
-  el.addEventListener("pointercancel", clear);
+  ["pointerup", "pointerleave", "pointercancel"].forEach((n) => el.addEventListener(n, clear));
   el.addEventListener("contextmenu", (ev) => { ev.preventDefault(); openOps(item); });
 }
 function openOps(item) { state.opsTarget = item; $("actions").hidden = false; }
@@ -66,16 +64,27 @@ async function createFolder(name) {
   await saveFile({ id: uuid(), name: label, path, body: "", language: "dir", kind: "dir", createdAt: now(), updatedAt: now(), source: "new" });
   toast("Folder ready"); if (state.session.mode === "workspace") paintWorkspace();
 }
-const _onAction = onAction;
-onAction = function (ev) {
+function handleOps(ev) {
   const act = ev.target.getAttribute("data-act"); if (!act) return;
   $("actions").hidden = true;
   const file = state.opsTarget || activeFile();
-  if (act === "share" && file) { shareItem(file); return; }
-  if (act === "new-file") { promptName(createFile); return; }
-  if (act === "new-folder") { const n = window.prompt("Folder name", "notes"); if (n) createFolder(n); return; }
-  _onAction(ev);
-};
+  if (act === "code" && file && file.id && !String(file.id).startsWith("dir:")) openFile(file.id, "code");
+  else if (act === "markdown" && file && file.id && !String(file.id).startsWith("dir:")) openFile(file.id, "markdown");
+  else if (act === "text" && file && file.id && !String(file.id).startsWith("dir:")) openFile(file.id, "text");
+  else if (act === "download" && file && file.kind !== "dir") downloadBlob(file.name, file.body || "", MIME[file.language] || "text/plain");
+  else if (act === "share" && file) shareItem(file);
+  else if (act === "new-file") promptName(createFile);
+  else if (act === "new-folder") { const n = window.prompt("Folder name", "notes"); if (n) createFolder(n); }
+  else if (act === "rename" && file && !String(file.id).startsWith("dir:")) {
+    const name = window.prompt("Rename", file.name);
+    if (name) { const parent = dirName(file.path || file.name); const next = uniqueName(joinPath(parent, safeName(name, langFromName(name)))); file.name = baseName(next); file.path = next; file.language = langFromName(file.name); saveFile(file).then(() => { paintEditor(); if (state.session.mode === "workspace") paintWorkspace(); }); }
+  } else if (act === "ai") go("ai");
+  else if (act === "close" && file && file.kind !== "dir") {
+    state.session.openIds = state.session.openIds.filter((id) => id !== file.id);
+    state.session.activeId = state.session.openIds[0] || null;
+    if (state.session.activeId) openFile(state.session.activeId); else go(state.lastHub || "home");
+  }
+}
 function bindKb() {
   const vv = window.visualViewport;
   const apply = () => { let kb = 0; if (vv) kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop); document.documentElement.style.setProperty("--kb", kb + "px"); };
@@ -86,5 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
   bindKb();
   const pills = $("place-pills");
   if (pills) pills.addEventListener("click", (ev) => { const b = ev.target.closest("button[data-place]"); const file = activeFile(); if (b && file) openFile(file.id, b.getAttribute("data-place")); });
-  $("actions").addEventListener("click", onAction);
+  const old = $("actions");
+  if (old) { const neu = old.cloneNode(true); old.parentNode.replaceChild(neu, old); neu.addEventListener("click", handleOps); }
 });
