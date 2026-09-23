@@ -45,7 +45,7 @@ self.addEventListener("fetch", (event) => {
       return fresh;
     } catch (_error) {
       if (request.mode === "navigate") {
-        return (await caches.match("./index.html")) || (await caches.match("./"));
+        return (await caches.match("./index.html")) || (await caches.match("./"))
       }
       return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
     }
