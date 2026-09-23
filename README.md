@@ -1,11 +1,9 @@
 # Naija DevKit
 
-Phone workspace. Files stay on the device.
+Offline-first phone workspace. Files live in IndexedDB on this device.
 
-https://aydanmoussa74-a11y.github.io/naija-devkit/
+Live on GitHub Pages under /naija-devkit/
 
-Open that URL once with data on. Then it runs from the cache.
+If an old build is stuck, clear site data or wait for cache ndk-shell-0.0.1-r3.
 
-Workspace files live in IndexedDB. API keys live in localStorage. Export a backup from Settings if you change phones.
-
-Pages → Settings → Pages → `main` / root.
+Version 0.0.1

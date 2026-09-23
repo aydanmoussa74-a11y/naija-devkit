@@ -1,1 +1,1 @@
-/* Naija DevKit loads ndk-core.js, ndk-ui.js, and ndk-more.js. */
+/* Split into ndk-core.js, ndk-ui.js, ndk-more.js */

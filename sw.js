@@ -1,4 +1,4 @@
-const CACHE_NAME = "ndk-shell-0.0.1-r2";
+const CACHE_NAME = "ndk-shell-0.0.1-r3";
 const PRECACHE = [
   "./",
   "./index.html",

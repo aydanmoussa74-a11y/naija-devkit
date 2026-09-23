@@ -1,14 +1,14 @@
 {
   "name": "Naija DevKit",
   "short_name": "DevKit",
-  "description": "Offline-first phone workspace for files, Markdown, and local labs.",
+  "description": "Offline-first phone workspace for files, Markdown, and local tools.",
   "start_url": "./index.html",
   "scope": "./",
   "id": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#16181d",
-  "theme_color": "#16181d",
+  "background_color": "#09090B",
+  "theme_color": "#09090B",
   "lang": "en",
   "categories": ["developer tools", "productivity", "utilities"],
   "icons": [
