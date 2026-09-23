@@ -1,14 +1,14 @@
 {
   "name": "Naija DevKit",
   "short_name": "DevKit",
-  "description": "Offline-first developer workspace for snippets, JSON, regex, IDs, and local backups.",
+  "description": "Offline-first phone workspace for files, Markdown, and local labs.",
   "start_url": "./index.html",
   "scope": "./",
   "id": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#1e1e1e",
-  "theme_color": "#1e1e1e",
+  "background_color": "#16181d",
+  "theme_color": "#16181d",
   "lang": "en",
   "categories": ["developer tools", "productivity", "utilities"],
   "icons": [

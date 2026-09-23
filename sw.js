@@ -1,4 +1,4 @@
-const CACHE_NAME = "naija-devkit-shell-v1";
+const CACHE_NAME = "ndk-shell-0.0.1";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -27,38 +27,29 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
-
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  event.respondWith(
-    (async () => {
-      const cached = await caches.match(request, { ignoreSearch: true });
-      if (cached) {
-        event.waitUntil(updateCache(request));
-        return cached;
+  event.respondWith((async () => {
+    const cached = await caches.match(request, { ignoreSearch: true });
+    if (cached) {
+      event.waitUntil(updateCache(request));
+      return cached;
+    }
+    try {
+      const fresh = await fetch(request);
+      if (fresh && fresh.ok) {
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(request, fresh.clone());
       }
-
-      try {
-        const fresh = await fetch(request);
-        if (fresh && fresh.ok) {
-          const copy = fresh.clone();
-          const cache = await caches.open(CACHE_NAME);
-          await cache.put(request, copy);
-        }
-        return fresh;
-      } catch (error) {
-        if (request.mode === "navigate") {
-          const shell = await caches.match("./index.html") || await caches.match("./");
-          if (shell) return shell;
-        }
-        return new Response("Naija DevKit is offline and this file is not cached yet.", {
-          status: 503,
-          headers: { "Content-Type": "text/plain; charset=utf-8" }
-        });
+      return fresh;
+    } catch (_error) {
+      if (request.mode === "navigate") {
+        return (await caches.match("./index.html")) || (await caches.match("./"));
       }
-    })()
-  );
+      return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
+    }
+  })());
 });
 
 async function updateCache(request) {
@@ -69,10 +60,6 @@ async function updateCache(request) {
       await cache.put(request, fresh.clone());
     }
   } catch (_error) {
-    /* stay on cache when the network is gone */
+    /* keep cache */
   }
 }
-
-self.addEventListener("message", (event) => {
-  if (event.data === "skipWaiting") self.skipWaiting();
-});
