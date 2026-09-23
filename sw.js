@@ -1,4 +1,4 @@
-const CACHE_NAME = "ndk-shell-0.0.1";
+const CACHE_NAME = "ndk-shell-0.0.1-r2";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -31,6 +31,7 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
   event.respondWith((async () => {
     const cached = await caches.match(request, { ignoreSearch: true });
     if (cached) {
@@ -60,5 +61,7 @@ async function updateCache(request) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(request, fresh.clone());
     }
-  } catch (_error) {}
+  } catch (_error) {
+    /* keep cache */
+  }
 }

@@ -1,1 +1,1 @@
-/* replaced by ndk-core.js + ndk-ui.js + ndk-more.js */
+/* Naija DevKit loads ndk-core.js, ndk-ui.js, and ndk-more.js. */
