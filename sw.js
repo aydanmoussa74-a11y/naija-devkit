@@ -1,35 +1,11 @@
-const CACHE_NAME = "ndk-shell-0.0.1-r6";
+const CACHE_NAME = "ndk-shell-0.0.1-r7";
 const PRECACHE = [
-  "./",
-  "./index.html",
-  "./app.html",
-  "./landing.css",
-  "./landing.js",
-  "./styles.css",
-  "./ndk-core.js",
-  "./ndk-ui.js",
-  "./ndk-more.js",
-  "./ndk-patch.js",
-  "./manifest.json",
-  "./sw.js",
-  "./icons/icon-192.svg",
-  "./icons/icon-512.svg"
+  "./", "./index.html", "./app.html", "./landing.css", "./landing.js", "./styles.css",
+  "./ndk-core.js", "./ndk-ui.js", "./ndk-more.js", "./ndk-patch.js", "./manifest.json",
+  "./sw.js", "./icons/icon-192.svg", "./icons/icon-512.svg"
 ];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
-    ).then(() => self.clients.claim())
-  );
-});
-
+self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())));
+self.addEventListener("activate", (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
@@ -37,35 +13,9 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
   event.respondWith((async () => {
     const cached = await caches.match(request, { ignoreSearch: true });
-    if (cached) {
-      event.waitUntil(updateCache(request));
-      return cached;
-    }
-    try {
-      const fresh = await fetch(request);
-      if (fresh && fresh.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        await cache.put(request, fresh.clone());
-      }
-      return fresh;
-    } catch (_error) {
-      if (request.mode === "navigate") {
-        if (url.pathname.endsWith("app.html")) {
-          return (await caches.match("./app.html")) || (await caches.match("./index.html"));
-        }
-        return (await caches.match("./index.html")) || (await caches.match("./"))
-      }
-      return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
-    }
+    if (cached) { event.waitUntil(updateCache(request)); return cached; }
+    try { const fresh = await fetch(request); if (fresh && fresh.ok) { const cache = await caches.open(CACHE_NAME); await cache.put(request, fresh.clone()); } return fresh; }
+    catch (_error) { if (request.mode === "navigate") return (await caches.match(url.pathname.endsWith("app.html") ? "./app.html" : "./index.html")) || (await caches.match("./")); return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } }); }
   })());
 });
-
-async function updateCache(request) {
-  try {
-    const fresh = await fetch(request);
-    if (fresh && fresh.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, fresh.clone());
-    }
-  } catch (_error) {}
-}
+async function updateCache(request) { try { const fresh = await fetch(request); if (fresh && fresh.ok) { const cache = await caches.open(CACHE_NAME); await cache.put(request, fresh.clone()); } } catch (_error) {} }
