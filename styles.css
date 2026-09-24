@@ -1,31 +1,29 @@
-```css
 :root {
-  --bg: #090a0f;
-  --fg: #F4F4F5;
-  --muted: #A1A1AA;
-  --surface: #12141c;
-  --bar: #0c0d12;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  /* Surface Layers */
+  --bg: #0d0f17;
+  --fg: #ffffff !important;
+  --muted: #94a3b8 !important;
+  --surface: #171a26;
+  --surface-raised: #212638;
+  --surface-deep: #090a0f;
+  --bar: #11131d;
+  
+  /* Borders & Accents */
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.28);
   --accent: #10b981;
   --accent-bright: #34d399;
-  --accent-ink: #052e1d;
-  --amber: #F59E0B;
-  --danger: #F87171;
-  --chip: #1b1e28;
-  --press: #1b202b;
-  --surface-raised: #181b26;
-  --surface-deep: #06070a;
-  --font: 16px;
-  --mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
-  --sans: system-ui, "Segoe UI", "Helvetica Neue", sans-serif;
+  --accent-ink: #022c22;
+  
+  --mono: "JetBrains Mono", "Fira Code", monospace;
+  --sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --dock: 58px;
   --kb: 0px;
   --chip-h: 52px;
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.3);
-  --accent-glow: 0 0 0 4px rgba(16, 185, 129, 0.12), 0 0 22px rgba(16, 185, 129, 0.18);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.6);
+  --accent-glow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 0 22px rgba(16, 185, 129, 0.3);
 }
 
 * {
@@ -33,14 +31,32 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html,
+html {
+  color-scheme: dark !important;
+  background-color: #0d0f17 !important;
+}
+
 body {
   margin: 0;
-  height: 100%;
-  background: var(--bg);
-  color: var(--fg);
+  min-height: 100dvh;
+  background-color: var(--bg) !important;
+  color: var(--fg) !important;
   font-family: var(--sans);
 }
+
+/* Force legibility on text elements */
+p, span, div, h1, h2, h3, label, strong, small {
+  color: inherit;
+}
+
+.wordmark, strong, b {
+  color: #ffffff !important;
+}
+
+.muted, small, .section-label, .kicker {
+  color: var(--muted) !important;
+}
+
 
 html {
   color-scheme: dark;
