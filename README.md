@@ -1,6 +1,3 @@
-
-
-```md
 # Naija DevKit
 
 > A local-first, offline-ready mobile code editor and developer workspace built for low-resource, mobile-first environments.
