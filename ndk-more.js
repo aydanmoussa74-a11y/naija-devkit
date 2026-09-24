@@ -61,7 +61,7 @@ function paintTool(id) {
   $("run-go").onclick = async () => {
     state.lab.runner = $("run-in").value; await saveLab();
     const name = uniqueName("runner.html");
-    const file = { id: uuid(), name, path: name, body: state.lab.runner, language: "html", createdAt: now(), updatedAt: now(), source: "runner" };
+    const file = { id: uuid(), name, path: name, body: state.lab.runner, language: "html", workspaceId: state.workspaceId || PERSONAL, createdAt: now(), updatedAt: now(), source: "runner" };
     await saveFile(file); await openFile(file.id, "code"); buzz(10); go("preview");
   };
 }
@@ -97,7 +97,7 @@ async function sendAi() {
 }
 async function exportBackup() {
   await flushEditor();
-  const bag = { app: APP, version: VERSION, exportedAt: now(), files: state.files, session: state.session, lab: state.lab, messages: state.messages, prefs: readPrefs(), keys: readKeys() };
+  const bag = { app: APP, version: VERSION, exportedAt: now(), files: state.files, workspaces: state.workspaces, session: state.session, lab: state.lab, messages: state.messages, prefs: readPrefs(), keys: readKeys() };
   downloadBlob("naija-devkit-backup.json", JSON.stringify(bag, null, 2), "application/json"); toast("Backup ready");
 }
 async function importBackup(ev) {
@@ -106,7 +106,11 @@ async function importBackup(ev) {
     const bag = JSON.parse(await file.text());
     if (!bag || !Array.isArray(bag.files)) throw new Error("Not a DevKit backup");
     await clearOf("files"); state.files = [];
-    for (const f of bag.files) { if (!f || !f.id) continue; await putOf("files", f); state.files.push(f); }
+    for (const f of bag.files) { if (!f || !f.id) continue; if (!f.workspaceId) f.workspaceId = PERSONAL; await putOf("files", f); state.files.push(f); }
+    if (Array.isArray(bag.workspaces)) {
+      await clearOf("workspaces"); state.workspaces = [];
+      for (const w of bag.workspaces) { if (!w || !w.id) continue; await putOf("workspaces", w); state.workspaces.push(w); }
+    }
     if (bag.lab) { state.lab = Object.assign(state.lab, bag.lab, { id: "lab" }); await saveLab(); }
     if (bag.session) { state.session = Object.assign(sess(), bag.session, { id: "ui" }); await saveSession(); }
     if (bag.prefs) writePrefs(Object.assign(readPrefs(), bag.prefs));
@@ -124,6 +128,17 @@ async function boot() {
     if (labs[0]) state.lab = Object.assign(state.lab, labs[0]);
     if (state.lab.vibe && !state.lab.runner) state.lab.runner = state.lab.vibe;
     state.messages = await allOf("messages");
+    try { state.workspaces = await allOf("workspaces"); } catch (_e) { state.workspaces = []; }
+    if (!state.workspaces.length) {
+      const box = { id: PERSONAL, name: "Personal", createdAt: now(), lastOpened: now() };
+      await putOf("workspaces", box);
+      state.workspaces = [box];
+    }
+    for (const f of state.files) {
+      if (!f.workspaceId) { f.workspaceId = PERSONAL; await putOf("files", f); }
+    }
+    state.workspaceId = state.session.workspaceId || PERSONAL;
+    if (!state.workspaces.some((w) => w.id === state.workspaceId)) state.workspaceId = state.workspaces[0].id;
     state.filter = state.session.filter || "all";
     state.lastHub = state.session.lastHub || "home";
     if (["lab", "workspace", "settings", "home"].includes(state.session.mode)) {
