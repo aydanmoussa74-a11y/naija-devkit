@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#09090B">
-  <meta name="description" content="Naija DevKit is an offline-first code workspace for building on your phone.">
+  <meta name="description" content="Write and preview HTML and Markdown on your phone. Files stay on the device.">
   <meta name="mobile-web-app-capable" content="yes">
   <title>Naija DevKit — Build from anywhere</title>
   <link rel="manifest" href="./manifest.json">
@@ -13,72 +13,38 @@
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <a class="brand" href="./index.html" aria-label="Naija DevKit home">
-      <span class="brand-mark">N</span>
-      <span>Naija DevKit</span>
-      <span class="version">0.0.1</span>
-    </a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="#features">Features</a>
-      <a href="#docs">Docs</a>
-      <a href="#changelog">Changelog</a>
-      <a href="https://github.com/aydanmoussa74-a11y/naija-devkit">GitHub</a>
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">N</span><span>Naija DevKit</span><small>0.0.1</small></a>
+    <nav aria-label="Main navigation">
+      <a href="#features">Features</a><a href="#docs">Docs</a><a href="#changelog">Changelog</a><a href="https://github.com/aydanmoussa74-a11y/naija-devkit">GitHub</a>
     </nav>
-    <div class="header-actions">
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <a class="nav-cta" href="./app.html">Open workspace <span aria-hidden="true">↗</span></a>
-    </div>
+    <a class="top-cta" href="./app.html">Open workspace <span aria-hidden="true">→</span></a>
   </header>
 
   <main id="main-content">
-    <section class="hero section-wrap" aria-labelledby="hero-title">
+    <section class="hero page-width">
       <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="status-dot"></span> Local-first developer tools</p>
-        <h1 id="hero-title">Build from<br><em>anywhere.</em></h1>
-        <p class="hero-lead">A focused code editor and preview workspace for your phone. Write, test, and ship ideas even when the radio drops.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="./app.html">Try it free <span aria-hidden="true">→</span></a>
-          <button class="button button-secondary" id="btn-install" type="button" hidden>Install app</button>
-        </div>
-        <p class="hero-note"><span aria-hidden="true">✦</span> No account. No upload. Your files stay on your device.</p>
+        <p class="eyebrow"><i></i> Code · Preview · Ship — on your phone</p>
+        <h1>Write &amp; preview HTML<br><em>right from your phone.</em></h1>
+        <p class="lead">A lightweight code editor with live HTML and Markdown preview, built for developers who ship from anywhere.</p>
+        <div class="actions"><a class="button primary" href="./app.html">Try it free <span>→</span></a><button class="button secondary" id="btn-install" type="button" hidden>Install app</button></div>
+        <p class="trust">✦ No account · Your files stay on your device</p>
       </div>
-      <div class="hero-visual reveal reveal-delay" aria-label="Naija DevKit mobile preview">
-        <div class="glow"></div>
-        <img src="https://files.catbox.moe/5cxkqn.png" alt="Naija DevKit running on mobile phones with code and Markdown previews">
-        <div class="floating-card card-one"><span class="card-icon">⌘</span><span><strong>Offline-first</strong><small>Works without a signal</small></span></div>
-        <div class="floating-card card-two"><span class="card-icon accent-icon">✓</span><span><strong>Ready to ship</strong><small>Preview in one tap</small></span></div>
-      </div>
+      <figure class="hero-art reveal delay"><div class="art-glow"></div><img src="https://files.catbox.moe/5cxkqn.png" alt="Naija DevKit running on two phones with code and Markdown previews"></figure>
     </section>
 
-    <section class="proof section-wrap reveal" aria-label="Product highlights">
-      <div><strong>100%</strong><span>local files</span></div>
-      <div><strong>0</strong><span>accounts required</span></div>
-      <div><strong>1 tap</strong><span>to preview</span></div>
-      <p>Made for developers who<br>ship from anywhere.</p>
+    <section class="demo-section page-width reveal" aria-labelledby="demo-title">
+      <div class="section-intro"><p class="eyebrow">See it in action</p><h2 id="demo-title">From idea to preview<br><span>in a few taps.</span></h2></div>
+      <figure class="demo"><video controls playsinline muted loop preload="metadata" poster="https://files.catbox.moe/5cxkqn.png"><source src="https://files.catbox.moe/b21666.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
     </section>
 
-    <section id="features" class="content-section section-wrap" aria-labelledby="features-title">
-      <div class="section-heading reveal"><p class="eyebrow">Everything you need</p><h2 id="features-title">Small surface.<br><span>Serious tools.</span></h2></div>
-      <div class="feature-grid">
-        <article class="feature-card feature-large reveal"><span class="feature-number">01</span><div class="feature-symbol symbol-editor">&lt;/&gt;</div><h3>Code on your terms.</h3><p>A clean editor for HTML, CSS, JavaScript, Markdown, JSON, and text. Your workspace is designed for a small screen without feeling small.</p><a href="./app.html">Open the editor <span aria-hidden="true">↗</span></a></article>
-        <article class="feature-card reveal reveal-delay"><span class="feature-number">02</span><div class="feature-symbol symbol-play">▶</div><h3>Preview instantly.</h3><p>Run HTML in a sandboxed preview with one tap. See the idea, fix the detail, keep moving.</p></article>
-        <article class="feature-card reveal reveal-delay-2"><span class="feature-number">03</span><div class="feature-symbol symbol-local">◉</div><h3>Stay in control.</h3><p>Files live in your browser’s local storage. Export, share, or download when you decide.</p></article>
-      </div>
-    </section>
+    <section id="features" class="features page-width" aria-labelledby="features-title"><div class="section-intro reveal"><p class="eyebrow">Built for the small screen</p><h2 id="features-title">Simple tools.<br><span>Real workflow.</span></h2></div><div class="feature-list"><article class="feature reveal"><b>01</b><div><strong>Write anywhere</strong><p>HTML, CSS, JavaScript, Markdown, JSON, and text in a focused phone-friendly editor.</p></div></article><article class="feature reveal delay"><b>02</b><div><strong>Preview instantly</strong><p>Run your HTML in a sandboxed preview with one tap and keep iterating.</p></div></article><article class="feature reveal delay-2"><b>03</b><div><strong>Stay local</strong><p>Your files live on this device. Export or share only when you choose.</p></div></article></div></section>
 
-    <section id="docs" class="docs-section section-wrap reveal" aria-labelledby="docs-title">
-      <div class="docs-panel"><div><p class="eyebrow">Start here</p><h2 id="docs-title">Your workspace,<br><span>your rules.</span></h2><p>Open a file, choose a place, and get to work. Naija DevKit stays out of the way so your ideas can take shape.</p></div><a class="button button-light" href="./app.html">Read the quick start <span aria-hidden="true">→</span></a></div>
-      <div class="doc-links"><a href="./app.html"><span>⌘</span><strong>Quick start<small>Open your first file</small></strong><b>↗</b></a><a href="#features"><span>◈</span><strong>Toolbox<small>Snippets, regex, JSON & more</small></strong><b>↗</b></a><a href="https://github.com/aydanmoussa74-a11y/naija-devkit"><span>◎</span><strong>Source code<small>Explore the project on GitHub</small></strong><b>↗</b></a></div>
-    </section>
+    <section id="docs" class="docs page-width reveal"><p class="eyebrow">Start building</p><h2>Everything you need<br><span>to get moving.</span></h2><p>Open the workspace, start a file, and build without waiting for a perfect setup.</p><div class="doc-actions"><a class="button primary" href="./app.html">Open workspace <span>→</span></a><a class="text-link" href="https://github.com/aydanmoussa74-a11y/naija-devkit">View source ↗</a></div></section>
 
-    <section id="changelog" class="changelog section-wrap reveal" aria-labelledby="changelog-title">
-      <div class="section-heading inline-heading"><div><p class="eyebrow">What’s new</p><h2 id="changelog-title">Changelog</h2></div><span class="release-pill">Latest release · 0.0.1</span></div>
-      <div class="release-row"><span class="release-date">SEP 2026</span><div><h3>A sharper workspace for the road.</h3><p>Naija DevKit launches with a local-first editor, live HTML and Markdown previews, handy developer tools, and a PWA that works offline.</p><div class="tag-list"><span>Editor</span><span>Preview</span><span>Offline</span><span>PWA</span></div></div></div>
-    </section>
+    <section id="changelog" class="changelog page-width reveal"><div><p class="eyebrow">Latest update</p><h2>Changelog</h2></div><article><small>0.0.1 · SEP 2026</small><h3>Naija DevKit is here.</h3><p>Local-first editing, live HTML and Markdown previews, useful developer tools, and an installable offline workspace.</p></article></section>
   </main>
-
-  <footer class="site-footer section-wrap"><a class="brand" href="./index.html"><span class="brand-mark">N</span><span>Naija DevKit</span></a><p>Built in Nigeria · Made for everywhere.</p><div><a href="#docs">Docs</a><a href="#changelog">Changelog</a><a href="https://github.com/aydanmoussa74-a11y/naija-devkit">GitHub</a></div></footer>
+  <footer class="footer page-width"><a class="brand" href="./index.html"><span class="brand-mark">N</span><span>Naija DevKit</span></a><p>Built in Nigeria · Made for everywhere.</p><div><a href="#docs">Docs</a><a href="#changelog">Changelog</a><a href="https://github.com/aydanmoussa74-a11y/naija-devkit">GitHub</a></div></footer>
   <script src="./landing.js" defer></script>
 </body>
 </html>
