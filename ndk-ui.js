@@ -181,17 +181,52 @@ function paintSearch(q) {
   sortedFiles().filter((f) => !needle || f.name.toLowerCase().includes(needle) || String(f.body).toLowerCase().includes(needle)).forEach((f) => box.appendChild(fileRow(f)));
   if (!box.childNodes.length) box.appendChild(emptyBox("No match on this device."));
 }
+function currentFolder() { return state.folder || ""; }
+function pathJoin(folder, name) {
+  const n = String(name || "").replace(/^\/+/, "");
+  return folder ? String(folder).replace(/\/+$/, "") + "/" + n : n;
+}
 async function createFile(name) {
-  const n = uniqueName(name || "untitled.html");
-  const file = { id: uuid(), name: n, path: n, body: n.endsWith(".html") ? "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>page</title>\n</head>\n<body>\n  \n</body>\n</html>\n" : "", language: langFromName(n), createdAt: now(), updatedAt: now(), source: "new" };
+  const raw = name || "untitled.html";
+  const safe = safeName(raw, langFromName(raw));
+  const n = uniqueName(pathJoin(currentFolder(), safe));
+  const label = n.split("/").pop();
+  const html = "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>page</title>\n</head>\n<body>\n  \n</body>\n</html>\n";
+  const file = {
+    id: uuid(), name: label, path: n,
+    body: /\.html?$/i.test(label) ? html : "",
+    language: langFromName(label), scratch: false,
+    workspaceId: state.workspaceId || PERSONAL,
+    createdAt: now(), updatedAt: now(), source: "new"
+  };
   state.session.welcomeSeen = true; await saveFile(file); await openFile(file.id);
 }
-function promptName(next) { const name = window.prompt("File name", "untitled.html"); if (name) next(safeName(name, langFromName(name))); }
+async function startScratch() {
+  state.session.welcomeSeen = true;
+  const file = {
+    id: uuid(), name: "untitled", path: pathJoin(currentFolder(), "untitled"),
+    body: "", language: "txt", scratch: true,
+    workspaceId: state.workspaceId || PERSONAL,
+    createdAt: now(), updatedAt: now(), source: "scratch"
+  };
+  await saveFile(file); await openFile(file.id, "code");
+}
+function closeSheet() { const sheet = $("name-sheet"); if (sheet) sheet.hidden = true; }
+function askName(title, initial, onok) {
+  const sheet = $("name-sheet");
+  if (!sheet) { const fallback = window.prompt(title, initial || ""); if (fallback) onok(fallback); return; }
+  $("name-sheet-title").textContent = title;
+  $("name-sheet-input").value = initial || "";
+  sheet.hidden = false;
+  sheet._onok = onok;
+  setTimeout(() => { try { $("name-sheet-input").focus(); $("name-sheet-input").select(); } catch (_e) {} }, 40);
+}
+function promptName(next) { askName("File name", "untitled.html", (name) => next(safeName(name, langFromName(name)))); }
 function bindUi() {
-  $("btn-start").onclick = () => promptName(createFile);
+  $("btn-start").onclick = () => startScratch();
   $("btn-import-welcome").onclick = () => $("file-input").click();
   $("ws-import").onclick = () => $("file-input").click();
-  $("ws-new").onclick = () => promptName(createFile);
+  $("ws-new").onclick = () => { const box = $("create-sheet"); if (box) box.hidden = !box.hidden; else promptName(createFile); };
   $("ws-search").onclick = () => go("search");
   $("home-cmd").onclick = () => go("search");
   $("search-back").onclick = () => go(state.lastHub || "home");
@@ -203,7 +238,7 @@ function bindUi() {
   $("ed-more").onclick = () => { $("actions").hidden = !$("actions").hidden; };
   $("chip-toggle").onclick = () => { state.chipsOpen = !state.chipsOpen; $("chip-sheet").classList.toggle("off", !state.chipsOpen); };
   $("drawer-scrim").onclick = () => { $("drawer").hidden = true; };
-  $("drawer-new").onclick = () => { $("drawer").hidden = true; promptName(createFile); };
+  $("drawer-new").onclick = () => { $("drawer").hidden = true; startScratch(); };
   $("pv-back").onclick = () => go("editor");
   $("pv-reload").onclick = () => paintPreview();
   $("ai-back").onclick = () => go(state.lastHub || "home");
@@ -225,8 +260,11 @@ function onAction(ev) {
   if (act === "text" && file) openFile(file.id, "text");
   if (act === "download" && file) downloadBlob(file.name, file.body || "", MIME[file.language] || "text/plain");
   if (act === "rename" && file) {
-    const name = window.prompt("Rename", file.name);
-    if (name) { file.name = uniqueName(safeName(name, langFromName(name))); file.path = file.name; file.language = langFromName(file.name); saveFile(file).then(() => paintEditor()); }
+    askName("Rename", file.name, (name) => {
+      const next = uniqueName(safeName(name, langFromName(name)));
+      file.name = next.split("/").pop(); file.path = next; file.language = langFromName(file.name); file.scratch = false;
+      saveFile(file).then(() => paintEditor());
+    });
   }
   if (act === "ai") go("ai");
   if (act === "close" && file) {
@@ -240,7 +278,7 @@ async function onImport(ev) {
   for (const raw of files) {
     const body = await raw.text();
     const name = uniqueName(safeName(raw.name, langFromName(raw.name)));
-    const file = { id: uuid(), name, path: name, body, language: langFromName(name), createdAt: now(), updatedAt: now(), source: "import" };
+    const file = { id: uuid(), name, path: name, body, language: langFromName(name), workspaceId: state.workspaceId || PERSONAL, createdAt: now(), updatedAt: now(), source: "import" };
     state.session.welcomeSeen = true; await saveFile(file); await openFile(file.id);
   }
   toast(files.length === 1 ? "Imported" : `Imported ${files.length} files`);
