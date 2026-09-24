@@ -1,36 +1,30 @@
 # Changelog
 
-All notable changes to Naija DevKit are documented here.
+All notable changes to Naija DevKit.
 
-## [0.0.1] — 2026-09-24
+## 0.0.1 — 2026-09-25
 
-Initial public release for the Africoders Hackathon / Challenge.
+### Workspaces
+- Files now live inside a workspace box, not one global pile.
+- Existing files migrate into **Personal**. Nothing is deleted.
+- **New workspace** starts empty. Explorer stays empty until you write or import.
+- Workspace chips on the Workspace screen switch boxes without mixing files.
 
-### Added
+### Start writing
+- Welcome and + no longer open the grey `github.io says` prompt.
+- **Start writing** opens an `untitled` scratch buffer so you can type first and name later.
+- New file / folder / workspace use an in-app name sheet (Cancel / Create).
 
-- Mobile-first code editor and developer workspace
-- HTML, CSS, JavaScript, TypeScript, Python, Markdown, JSON, and text file support
-- Local file storage with IndexedDB
-- Create, import, search, rename, download, share, and organize files
-- Folder support and long-press file actions on mobile
-- HTML preview in a sandboxed iframe
-- Markdown preview
-- Mobile helper chips for common code and Markdown syntax
-- File filters and recent-file navigation
-- JSON export/import backup and restore
-- Snippets tool
-- Regex tester
-- JSON formatter and minifier
-- Scratch HTML runner
-- PWA installation through the Web App Manifest
-- Service Worker caching and offline navigation fallback
-- Optional Gemini AI assistant experiment, under development
+### File tree
+- Rows show a type tile (HTML, CSS, JS, MD, DIR, …), name, and a language pill.
+- **⋮** on each row opens file ops. Long-press opens the same menu.
+- Ops: open as Code / Markdown / Text, download, share, rename, new file, new folder, delete.
 
-### Notes
+### Storage
+- IndexedDB bumped to v3 with a `workspaces` store.
+- Backup JSON now includes `workspaces`. Restore maps old files to Personal.
 
-- The core editor, local file tools, previews, and backup workflow are designed to work without a network connection.
-- The AI assistant is experimental and requires a configured Gemini API key and network access when used.
-- Browser storage can be affected by device storage pressure, so users should export backups for important work.
-- This release is an early foundation. Future releases will focus on production hardening, stronger project workflows, and the extensions engine.
-
-[0.0.1]: https://github.com/aydanmoussa74-a11y/naija-devkit/releases/tag/v0.0.1
+### Unchanged
+- Offline-first. No tracking.
+- Editor, preview iframe, Code / Markdown / Text pills, chip rail, dock.
+- GitHub Pages path `/naija-devkit/`.

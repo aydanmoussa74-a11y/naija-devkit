@@ -3,7 +3,8 @@
 const APP = "naija-devkit";
 const VERSION = "0.0.1";
 const DB_NAME = "naija-devkit";
-const DB_VERSION = 2;
+const DB_VERSION = 3;
+const PERSONAL = "personal";
 const KEYS = "ndk.keys.v1";
 const PREFS = "ndk.prefs.v1";
 const GH = "https://github.com/aydanmoussa74-a11y/naija-devkit";
@@ -49,13 +50,17 @@ const state = {
   filter: "all",
   lastHub: "home",
   dirty: false,
-  chipsOpen: true
+  chipsOpen: true,
+  workspaces: [],
+  workspaceId: PERSONAL,
+  folder: "",
+  opsTarget: null
 };
 
 function sess() {
   return {
     id: "ui", mode: "welcome", openIds: [], activeId: null, cursor: 0, scrollTop: 0,
-    welcomeSeen: false, place: "code", filter: "all", lastHub: "home", tool: null, updatedAt: now()
+    welcomeSeen: false, place: "code", filter: "all", lastHub: "home", tool: null, workspaceId: PERSONAL, updatedAt: now()
   };
 }
 function now() { return new Date().toISOString(); }
@@ -91,7 +96,7 @@ function openDb() {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
-      ["files", "session", "lab", "messages"].forEach((n) => {
+      ["files", "session", "lab", "messages", "workspaces"].forEach((n) => {
         if (!db.objectStoreNames.contains(n)) db.createObjectStore(n, { keyPath: "id" });
       });
       if (db.objectStoreNames.contains("items")) {
@@ -150,8 +155,12 @@ function safeName(title, lang) {
   const ext = EXT[lang] || "txt";
   return base.endsWith("." + ext) ? base : `${base}.${ext}`;
 }
+function wsFiles() {
+  const id = state.workspaceId || PERSONAL;
+  return state.files.filter((f) => (f.workspaceId || PERSONAL) === id);
+}
 function uniqueName(name) {
-  const have = new Set(state.files.map((f) => f.path));
+  const have = new Set(wsFiles().map((f) => f.path));
   if (!have.has(name)) return name;
   const i = name.lastIndexOf(".");
   const stem = i >= 0 ? name.slice(0, i) : name;
@@ -168,8 +177,11 @@ function readPrefs() {
 }
 function writePrefs(p) { localStorage.setItem(PREFS, JSON.stringify(p)); }
 function activeFile() { return state.files.find((f) => f.id === state.session.activeId) || null; }
-function sortedFiles() { return state.files.slice().sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))); }
+function sortedFiles() {
+  return wsFiles().slice().sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+}
 async function saveFile(file) {
+  if (!file.workspaceId) file.workspaceId = state.workspaceId || PERSONAL;
   file.updatedAt = now();
   const i = state.files.findIndex((f) => f.id === file.id);
   if (i >= 0) state.files[i] = file; else state.files.push(file);
@@ -179,6 +191,7 @@ async function saveSession() {
   state.session.updatedAt = now();
   state.session.filter = state.filter;
   state.session.lastHub = state.lastHub;
+  state.session.workspaceId = state.workspaceId || PERSONAL;
   await putOf("session", state.session);
 }
 async function saveLab() { await putOf("lab", Object.assign({ id: "lab" }, state.lab)); }
