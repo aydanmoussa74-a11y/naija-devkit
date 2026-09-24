@@ -21,7 +21,7 @@
       <h1>Welcome to Naija DevKit</h1>
       <p class="lead">A phone workspace that keeps working when the radio drops. Files live on this device.</p>
       <div class="row">
-        <button class="primary" id="btn-start" type="button">Start a file</button>
+        <button class="primary" id="btn-start" type="button">Start writing</button>
         <button class="ghost" id="btn-import-welcome" type="button">Import from device</button>
       </div>
     </div>
@@ -51,6 +51,7 @@
       <button class="icon-btn" id="ws-new" type="button" aria-label="New file"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     </header>
     <div class="page-body">
+      <div class="filters ws-boxes" id="ws-boxes" role="tablist" aria-label="Workspaces"></div>
       <div class="strip" id="ws-strip"></div>
       <div class="filters" id="ws-filters" role="tablist" aria-label="File type"></div>
       <div id="ws-list" class="file-list"></div>
@@ -152,7 +153,25 @@
     <button type="button" data-act="new-file">New file</button>
     <button type="button" data-act="new-folder">New folder</button>
     <button type="button" data-act="ai">Assistant</button>
+    <button type="button" data-act="delete">Delete</button>
     <button type="button" data-act="close">Close file</button>
+  </div>
+  <div id="create-sheet" class="actions" hidden>
+    <button type="button" data-create="scratch">Start writing</button>
+    <button type="button" data-create="file">New file</button>
+    <button type="button" data-create="folder">New folder</button>
+    <button type="button" data-create="workspace">New workspace</button>
+  </div>
+  <div id="name-sheet" class="sheet" hidden>
+    <div class="scrim" id="name-sheet-scrim"></div>
+    <div class="sheet-card" role="dialog" aria-labelledby="name-sheet-title">
+      <h3 id="name-sheet-title">Name</h3>
+      <input id="name-sheet-input" type="text" autocomplete="off" enterkeyhint="done">
+      <div class="row">
+        <button class="ghost" id="name-sheet-cancel" type="button">Cancel</button>
+        <button class="primary" id="name-sheet-ok" type="button">Create</button>
+      </div>
+    </div>
   </div>
   <input id="file-input" type="file" hidden multiple accept=".html,.css,.js,.ts,.py,.md,.json,.txt,text/*">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
