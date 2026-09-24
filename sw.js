@@ -1,7 +1,10 @@
-const CACHE_NAME = "ndk-shell-0.0.1-r5";
+const CACHE_NAME = "ndk-shell-0.0.1-r6";
 const PRECACHE = [
   "./",
   "./index.html",
+  "./app.html",
+  "./landing.css",
+  "./landing.js",
   "./styles.css",
   "./ndk-core.js",
   "./ndk-ui.js",
@@ -47,6 +50,9 @@ self.addEventListener("fetch", (event) => {
       return fresh;
     } catch (_error) {
       if (request.mode === "navigate") {
+        if (url.pathname.endsWith("app.html")) {
+          return (await caches.match("./app.html")) || (await caches.match("./index.html"));
+        }
         return (await caches.match("./index.html")) || (await caches.match("./"))
       }
       return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
