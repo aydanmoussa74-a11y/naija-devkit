@@ -1,0 +1,14 @@
+body.swiping { overflow: hidden; }
+body.swiping .page-body { overflow: hidden; }
+.page.has-dock.swipe-live {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 8;
+  padding-bottom: calc(var(--dock) + var(--safe-b));
+  will-change: transform;
+}
+.page.has-dock.swipe-live .page-body { pointer-events: none; }
