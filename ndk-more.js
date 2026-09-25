@@ -119,6 +119,7 @@ async function importBackup(ev) {
   } catch (err) { toast("Could not restore that file"); }
 }
 async function boot() {
+  state.booting = true;
   bindUi();
   try {
     state.files = await allOf("files");
@@ -147,7 +148,12 @@ async function boot() {
     }
   } catch (err) { toast("Storage unavailable"); }
   const prefs = readPrefs();
-  if (!state.session.welcomeSeen && !state.files.length) { showPage("welcome"); return; }
+  if (!state.session.welcomeSeen && !state.files.length) {
+    history.replaceState({ page: "welcome", extra: null }, "", "#welcome");
+    showPage("welcome");
+    state.booting = false;
+    return;
+  }
   state.session.welcomeSeen = true; await saveSession();
   const mode = prefs.restore ? state.session.mode : "home";
   if (mode === "welcome") go("home");
@@ -156,6 +162,7 @@ async function boot() {
     else go("home");
   } else if (PAGES.includes(mode)) go(mode, state.session.tool);
   else go("home");
+  state.booting = false;
 }
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").catch(() => {}); });
