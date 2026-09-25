@@ -20,6 +20,12 @@ All notable changes to Naija DevKit.
 - **⋮** on each row opens file ops. Long-press opens the same menu.
 - Ops: open as Code / Markdown / Text, download, share, rename, new file, new folder, delete.
 
+### Navigation
+- In-app places push browser history (`#home`, `#editor`, …).
+- Phone Back and the editor back button leave the current screen, not the whole PWA.
+- Back from Home can still leave the site (one more Back at the root).
+- Short haptic on place change when the phone supports it.
+
 ### Storage
 - IndexedDB bumped to v3 with a `workspaces` store.
 - Backup JSON now includes `workspaces`. Restore maps old files to Personal.
