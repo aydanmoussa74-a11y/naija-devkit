@@ -25,6 +25,7 @@ All notable changes to Naija DevKit.
 - Phone Back and the editor back button leave the current screen, not the whole PWA.
 - Back from Home can still leave the site (one more Back at the root).
 - Short haptic on place change when the phone supports it.
+- Dock pages drag with the finger. Neighbour peeks in. Snap past ~35% width. No wrap, no editor swipe.
 
 ### Storage
 - IndexedDB bumped to v3 with a `workspaces` store.
